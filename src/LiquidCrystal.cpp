@@ -67,6 +67,8 @@ void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t en
   _data_pins[6] = d6;
   _data_pins[7] = d7; 
 
+	_cpage = LCD_CPAGE0;
+
   if (fourbitmode)
     _displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
   else 
@@ -136,19 +138,19 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
     // page 45 figure 23
 
     // Send function set command sequence
-    command(LCD_FUNCTIONSET | _displayfunction);
+    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
     delayMicroseconds(4500);  // wait more than 4.1ms
 
     // second try
-    command(LCD_FUNCTIONSET | _displayfunction);
+    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
     delayMicroseconds(150);
 
     // third go
-    command(LCD_FUNCTIONSET | _displayfunction);
+    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
   }
 
   // finally, set # lines, font size, etc.
-  command(LCD_FUNCTIONSET | _displayfunction);  
+  command(LCD_FUNCTIONSET | _displayfunction | _cpage);
 
   // turn the display on with no cursor or blinking default
   _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;  
@@ -268,6 +270,21 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
   for (int i=0; i<8; i++) {
     write(charmap[i]);
   }
+}
+
+// Set code page for characters. Defaults to 0.
+// Caveat! If there is text on screen - it will be garbled!
+void LiquidCrystal::setCodePage(uint8_t page) {
+	uint8_t opage = _cpage;
+
+	if (page == 0) {
+		_cpage = LCD_CPAGE0;
+	} else {
+		_cpage = LCD_CPAGE1;
+	}
+
+	if (opage != _cpage)
+		command(LCD_FUNCTIONSET | _displayfunction | _cpage);
 }
 
 /*********** mid level commands, for sending data/cmds */
