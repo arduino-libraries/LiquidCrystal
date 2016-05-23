@@ -67,7 +67,7 @@ void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t en
   _data_pins[6] = d6;
   _data_pins[7] = d7; 
 
-	_cpage = LCD_CPAGE0;
+  _cpage = LCD_CPAGE0;
 
   if (fourbitmode)
     _displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
@@ -138,15 +138,15 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
     // page 45 figure 23
 
     // Send function set command sequence
-    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
+    command(LCD_FUNCTIONSET | _displayfunction);
     delayMicroseconds(4500);  // wait more than 4.1ms
 
     // second try
-    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
+    command(LCD_FUNCTIONSET | _displayfunction);
     delayMicroseconds(150);
 
     // third go
-    command(LCD_FUNCTIONSET | _displayfunction | _cpage);
+    command(LCD_FUNCTIONSET | _displayfunction);
   }
 
   // finally, set # lines, font size, etc.
