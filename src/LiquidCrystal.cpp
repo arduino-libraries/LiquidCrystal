@@ -302,11 +302,11 @@ void LiquidCrystal::send(uint8_t value, uint8_t mode) {
 
 void LiquidCrystal::pulseEnable(void) {
   digitalWrite(_enable_pin, LOW);
-  delayMicroseconds(1);    
+  delayMicroseconds(5);    
   digitalWrite(_enable_pin, HIGH);
-  delayMicroseconds(1);    // enable pulse must be >450ns
+  delayMicroseconds(5);    // enable pulse must be >450ns
   digitalWrite(_enable_pin, LOW);
-  delayMicroseconds(100);   // commands need > 37us to settle
+  delayMicroseconds(90);   // commands need > 37us to settle
 }
 
 void LiquidCrystal::write4bits(uint8_t value) {
