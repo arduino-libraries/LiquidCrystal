@@ -29,23 +29,27 @@
  by Tom Igoe
  modified 22 Nov 2010
  by Tom Igoe
+ modified 7 Nov 2016
+ by Arturo Guadalupi
 
  This example code is in the public domain.
 
  http://www.arduino.cc/en/Tutorial/LiquidCrystalSetCursor
 
- */
+*/
 
 // include the library code:
 #include <LiquidCrystal.h>
+
+// initialize the library with the numbers of the interface pins
+// initialize the library with the arduino pin numbers of the LCD interface pins
+const int rs=12, en=11, d4=5, d5=4, d6=3, d7=2;
+LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
 
 // these constants won't change.  But you can change the size of
 // your LCD using them:
 const int numRows = 2;
 const int numCols = 16;
-
-// initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 void setup() {
   // set up the LCD's number of columns and rows:
