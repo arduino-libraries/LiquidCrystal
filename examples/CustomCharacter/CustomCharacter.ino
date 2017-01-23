@@ -114,12 +114,15 @@ void setup() {
   lcd.createChar(3, armsDown);
   // create a new character
   lcd.createChar(4, armsUp);
-
+  
+  // set the cursor to the top left
+  lcd.setCursor(0,0);
+  
   // Print a message to the lcd.
   lcd.print("I ");
   lcd.write(byte(0)); // when calling lcd.write() '0' must be cast as a byte
   lcd.print(" Arduino! ");
-  lcd.write((byte) 1);
+  lcd.write((byte)1);
 
 }
 
