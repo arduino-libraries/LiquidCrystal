@@ -467,3 +467,24 @@ uint8_t LiquidCrystal::read4bits()
 
   return value;
 }
+
+// Reads data from the LCD in 8Bit Mode
+uint8_t LiquidCrystal::read8bits()
+{
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1); // tDDR time
+  uint8_t value =0;
+  for(int i=7; i>=0; i--)
+  {
+    value= value<< 1;
+
+    pinMode(_data_pins[i], INPUT);
+    if(digitalRead(_data_pins[i]) == HIGH)
+    {
+	  value+=1;
+    }
+  }
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(1); //tDHR time
+  return value;
+}
