@@ -43,10 +43,10 @@
 // include the library code:
 #include <LiquidCrystal.h>
 
-// initialize the library with the numbers of the interface pins
-// initialize the library with the arduino pin numbers of the LCD interface pins
-const int rs=12, en=11, d4=5, d5=4, d6=3, d7=2;
-LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
+// initialize the library by associating any needed LCD interface pin
+// with the arduino pin number it is connected to
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 // make some custom characters:
 byte heart[8] = {
@@ -118,10 +118,10 @@ void setup() {
   lcd.createChar(3, armsDown);
   // create a new character
   lcd.createChar(4, armsUp);
-  
+
   // set the cursor to the top left
-  lcd.setCursor(0,0);
-  
+  lcd.setCursor(0, 0);
+
   // Print a message to the lcd.
   lcd.print("I ");
   lcd.write(byte(0)); // when calling lcd.write() '0' must be cast as a byte
