@@ -1,8 +1,9 @@
-#ifndef LiquidCrystal_h
-#define LiquidCrystal_h
+#ifndef STEMMA_LiquidCrystal_h
+#define STEMMA_LiquidCrystal_h
 
 #include <inttypes.h>
 #include "Print.h"
+#include <seesaw.h>
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
@@ -42,24 +43,27 @@
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
 
-class LiquidCrystal : public Print {
+class STEMMA_LiquidCrystal : public Print {
 public:
-  LiquidCrystal(uint8_t rs, uint8_t enable,
+  STEMMA_LiquidCrystal(uint8_t rs, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 		uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-  LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+  STEMMA_LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 		uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-  LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+  STEMMA_LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
-  LiquidCrystal(uint8_t rs, uint8_t enable,
+  STEMMA_LiquidCrystal(uint8_t rs, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
 
+  STEMMA_LiquidCrystal();
+
+  //TODO: add PWM pins
   void init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
 	    uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 	    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
     
-  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS, uint8_t i2c_addr = SEESAW_ADDRESS);
 
   void clear();
   void home();
@@ -103,6 +107,8 @@ private:
 
   uint8_t _numlines;
   uint8_t _row_offsets[4];
+
+  Adafruit_seesaw _ss;
 };
 
 #endif

@@ -1,4 +1,4 @@
-#include "LiquidCrystal.h"
+#include "STEMMA_LiquidCrystal.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -22,35 +22,41 @@
 //
 // Note, however, that resetting the Arduino doesn't reset the LCD, so we
 // can't assume that its in that state when a sketch starts (and the
-// LiquidCrystal constructor is called).
+// STEMMA_LiquidCrystal constructor is called).
 
-LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 			     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
   init(0, rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
 }
 
-LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t enable,
+STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 			     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
   init(0, rs, 255, enable, d0, d1, d2, d3, d4, d5, d6, d7);
 }
 
-LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
   init(1, rs, rw, enable, d0, d1, d2, d3, 0, 0, 0, 0);
 }
 
-LiquidCrystal::LiquidCrystal(uint8_t rs,  uint8_t enable,
+STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs,  uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
   init(1, rs, 255, enable, d0, d1, d2, d3, 0, 0, 0, 0);
 }
 
-void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
+STEMMA_LiquidCrystal::STEMMA_LiquidCrystal() : _ss()
+{
+  init(1, 6, 255, 7, 8, 9, 10, 11, 0, 0, 0, 0);
+}
+
+//TODO: add PWM pins
+void STEMMA_LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
 			 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 			 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
@@ -72,10 +78,18 @@ void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t en
   else 
     _displayfunction = LCD_8BITMODE | LCD_1LINE | LCD_5x8DOTS;
   
-  begin(16, 1);  
+  //begin(16, 1);  
 }
 
-void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
+void STEMMA_LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize, uint8_t i2c_addr) {
+  _ss.begin(i2c_addr);
+
+  _ss.pinModeBulk(0b1100, OUTPUT);
+  _ss.digitalWriteBulk(0b1100, LOW);
+
+  _ss.analogWrite(0, 125);
+  _ss.analogWrite(1, 125);
+
   if (lines > 1) {
     _displayfunction |= LCD_2LINE;
   }
@@ -88,17 +102,17 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
     _displayfunction |= LCD_5x10DOTS;
   }
 
-  pinMode(_rs_pin, OUTPUT);
+  _ss.pinMode(_rs_pin, OUTPUT);
   // we can save 1 pin by not using RW. Indicate by passing 255 instead of pin#
   if (_rw_pin != 255) { 
-    pinMode(_rw_pin, OUTPUT);
+    _ss.pinMode(_rw_pin, OUTPUT);
   }
-  pinMode(_enable_pin, OUTPUT);
+  _ss.pinMode(_enable_pin, OUTPUT);
   
   // Do these once, instead of every time a character is drawn for speed reasons.
   for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
   {
-    pinMode(_data_pins[i], OUTPUT);
+    _ss.pinMode(_data_pins[i], OUTPUT);
    } 
 
   // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
@@ -106,10 +120,10 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
   // before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
   delayMicroseconds(50000); 
   // Now we pull both RS and R/W low to begin commands
-  digitalWrite(_rs_pin, LOW);
-  digitalWrite(_enable_pin, LOW);
+  _ss.digitalWrite(_rs_pin, LOW);
+  _ss.digitalWrite(_enable_pin, LOW);
   if (_rw_pin != 255) { 
-    digitalWrite(_rw_pin, LOW);
+    _ss.digitalWrite(_rw_pin, LOW);
   }
   
   //put the LCD into 4 bit or 8 bit mode
@@ -164,7 +178,7 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 
 }
 
-void LiquidCrystal::setRowOffsets(int row0, int row1, int row2, int row3)
+void STEMMA_LiquidCrystal::setRowOffsets(int row0, int row1, int row2, int row3)
 {
   _row_offsets[0] = row0;
   _row_offsets[1] = row1;
@@ -173,19 +187,19 @@ void LiquidCrystal::setRowOffsets(int row0, int row1, int row2, int row3)
 }
 
 /********** high level commands, for the user! */
-void LiquidCrystal::clear()
+void STEMMA_LiquidCrystal::clear()
 {
   command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
   delayMicroseconds(2000);  // this command takes a long time!
 }
 
-void LiquidCrystal::home()
+void STEMMA_LiquidCrystal::home()
 {
   command(LCD_RETURNHOME);  // set cursor position to zero
   delayMicroseconds(2000);  // this command takes a long time!
 }
 
-void LiquidCrystal::setCursor(uint8_t col, uint8_t row)
+void STEMMA_LiquidCrystal::setCursor(uint8_t col, uint8_t row)
 {
   const size_t max_lines = sizeof(_row_offsets) / sizeof(*_row_offsets);
   if ( row >= max_lines ) {
@@ -199,70 +213,70 @@ void LiquidCrystal::setCursor(uint8_t col, uint8_t row)
 }
 
 // Turn the display on/off (quickly)
-void LiquidCrystal::noDisplay() {
+void STEMMA_LiquidCrystal::noDisplay() {
   _displaycontrol &= ~LCD_DISPLAYON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void LiquidCrystal::display() {
+void STEMMA_LiquidCrystal::display() {
   _displaycontrol |= LCD_DISPLAYON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 
 // Turns the underline cursor on/off
-void LiquidCrystal::noCursor() {
+void STEMMA_LiquidCrystal::noCursor() {
   _displaycontrol &= ~LCD_CURSORON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void LiquidCrystal::cursor() {
+void STEMMA_LiquidCrystal::cursor() {
   _displaycontrol |= LCD_CURSORON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 
 // Turn on and off the blinking cursor
-void LiquidCrystal::noBlink() {
+void STEMMA_LiquidCrystal::noBlink() {
   _displaycontrol &= ~LCD_BLINKON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void LiquidCrystal::blink() {
+void STEMMA_LiquidCrystal::blink() {
   _displaycontrol |= LCD_BLINKON;
   command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 
 // These commands scroll the display without changing the RAM
-void LiquidCrystal::scrollDisplayLeft(void) {
+void STEMMA_LiquidCrystal::scrollDisplayLeft(void) {
   command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
 }
-void LiquidCrystal::scrollDisplayRight(void) {
+void STEMMA_LiquidCrystal::scrollDisplayRight(void) {
   command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
 }
 
 // This is for text that flows Left to Right
-void LiquidCrystal::leftToRight(void) {
+void STEMMA_LiquidCrystal::leftToRight(void) {
   _displaymode |= LCD_ENTRYLEFT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
 
 // This is for text that flows Right to Left
-void LiquidCrystal::rightToLeft(void) {
+void STEMMA_LiquidCrystal::rightToLeft(void) {
   _displaymode &= ~LCD_ENTRYLEFT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
 
 // This will 'right justify' text from the cursor
-void LiquidCrystal::autoscroll(void) {
+void STEMMA_LiquidCrystal::autoscroll(void) {
   _displaymode |= LCD_ENTRYSHIFTINCREMENT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
 
 // This will 'left justify' text from the cursor
-void LiquidCrystal::noAutoscroll(void) {
+void STEMMA_LiquidCrystal::noAutoscroll(void) {
   _displaymode &= ~LCD_ENTRYSHIFTINCREMENT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
 
 // Allows us to fill the first 8 CGRAM locations
 // with custom characters
-void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
+void STEMMA_LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
   location &= 0x7; // we only have 8 locations 0-7
   command(LCD_SETCGRAMADDR | (location << 3));
   for (int i=0; i<8; i++) {
@@ -272,11 +286,11 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
 
 /*********** mid level commands, for sending data/cmds */
 
-inline void LiquidCrystal::command(uint8_t value) {
+inline void STEMMA_LiquidCrystal::command(uint8_t value) {
   send(value, LOW);
 }
 
-inline size_t LiquidCrystal::write(uint8_t value) {
+inline size_t STEMMA_LiquidCrystal::write(uint8_t value) {
   send(value, HIGH);
   return 1; // assume sucess
 }
@@ -284,12 +298,12 @@ inline size_t LiquidCrystal::write(uint8_t value) {
 /************ low level data pushing commands **********/
 
 // write either command or data, with automatic 4/8-bit selection
-void LiquidCrystal::send(uint8_t value, uint8_t mode) {
-  digitalWrite(_rs_pin, mode);
+void STEMMA_LiquidCrystal::send(uint8_t value, uint8_t mode) {
+  _ss.digitalWrite(_rs_pin, mode);
 
   // if there is a RW pin indicated, set it low to Write
   if (_rw_pin != 255) { 
-    digitalWrite(_rw_pin, LOW);
+    _ss.digitalWrite(_rw_pin, LOW);
   }
   
   if (_displayfunction & LCD_8BITMODE) {
@@ -300,26 +314,27 @@ void LiquidCrystal::send(uint8_t value, uint8_t mode) {
   }
 }
 
-void LiquidCrystal::pulseEnable(void) {
-  digitalWrite(_enable_pin, LOW);
+void STEMMA_LiquidCrystal::pulseEnable(void) {
+  _ss.digitalWrite(_enable_pin, LOW);
   delayMicroseconds(1);    
-  digitalWrite(_enable_pin, HIGH);
+  _ss.digitalWrite(_enable_pin, HIGH);
   delayMicroseconds(1);    // enable pulse must be >450ns
-  digitalWrite(_enable_pin, LOW);
+  _ss.digitalWrite(_enable_pin, LOW);
   delayMicroseconds(100);   // commands need > 37us to settle
 }
 
-void LiquidCrystal::write4bits(uint8_t value) {
+void STEMMA_LiquidCrystal::write4bits(uint8_t value) {
   for (int i = 0; i < 4; i++) {
-    digitalWrite(_data_pins[i], (value >> i) & 0x01);
+    _ss.digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
 
   pulseEnable();
 }
 
-void LiquidCrystal::write8bits(uint8_t value) {
+void STEMMA_LiquidCrystal::write8bits(uint8_t value) {
+  //this doesn't get used in the stemma version
   for (int i = 0; i < 8; i++) {
-    digitalWrite(_data_pins[i], (value >> i) & 0x01);
+    _ss.digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
   
   pulseEnable();
