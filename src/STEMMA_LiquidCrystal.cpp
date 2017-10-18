@@ -24,6 +24,17 @@
 // can't assume that its in that state when a sketch starts (and the
 // STEMMA_LiquidCrystal constructor is called).
 
+#define SS_RS 8
+#define SS_EN 9
+#define SS_D0 10
+#define SS_D1 11
+#define SS_D2 14
+#define SS_D3 15
+#define SS_BLR 4
+#define SS_BLG 7
+#define SS_BLB 6
+#define SS_CONTRAST 5
+
 STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 			     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
@@ -52,7 +63,7 @@ STEMMA_LiquidCrystal::STEMMA_LiquidCrystal(uint8_t rs,  uint8_t enable,
 
 STEMMA_LiquidCrystal::STEMMA_LiquidCrystal() : _ss()
 {
-  init(1, 6, 255, 7, 8, 9, 10, 11, 0, 0, 0, 0);
+  init(1, SS_RS, 255, SS_EN, SS_D0, SS_D1, SS_D2, SS_D3, 0, 0, 0, 0);
 }
 
 //TODO: add PWM pins
@@ -84,11 +95,8 @@ void STEMMA_LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uin
 void STEMMA_LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize, uint8_t i2c_addr) {
   _ss.begin(i2c_addr);
 
-  _ss.pinModeBulk(0b1100, OUTPUT);
-  _ss.digitalWriteBulk(0b1100, LOW);
-
-  _ss.analogWrite(0, 125);
-  _ss.analogWrite(1, 125);
+  _ss.analogWrite(SS_BLB, 125);
+  _ss.analogWrite(SS_CONTRAST, 155);
 
   if (lines > 1) {
     _displayfunction |= LCD_2LINE;

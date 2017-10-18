@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 #include "Print.h"
-#include <seesaw.h>
+#include <Adafruit_seesaw.h>
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
