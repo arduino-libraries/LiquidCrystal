@@ -2,7 +2,7 @@
 #define LiquidCrystal_h
 
 #include <inttypes.h>
-#include "Print.h"
+#include "Arduino.h"
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
