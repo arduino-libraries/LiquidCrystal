@@ -47,30 +47,6 @@ image:https://user-images.githubusercontent.com/36513474/67893895-4e03d780-fb79-
 
     Liquid Crystal is free for everyone. The licensed library can be copied, redistributed and used in the projects, assignments or anywhere.
 
-Functions
-~~~~~~~~~
-
-* LiquidCrystal()
-* begin()
-* clear()
-* home()
-* setCursor()
-* write()
-* print()
-* cursor()
-* noCursor()
-* blink()
-* noBlink()
-* display()
-* noDisplay()
-* scrollDisplayLeft()
-* scrollDisplayRight()
-* autoscroll()
-* noAutoscroll()
-* leftToRight()
-* rightToLeft()
-* createChar()
-
 Example
 ~~~~~~~
 
@@ -90,11 +66,6 @@ If you want to contribute to this project:
 - Contribute new protocols
 
 Please read https://github.com/arduino-libraries/LiquidCrystal/blob/master/CONTRIBUTING.md[CONTRIBUTING.md^] for details on our code of conduct, and the process for submitting pull requests to us.
-
-Credits
-~~~~~~~
-
-The authors of this library are Arduino and Adafruit. This Library is maintained by Arduino info@arduino.cc
 
 License
 ~~~~~~~

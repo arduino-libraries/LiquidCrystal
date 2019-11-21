@@ -10,4 +10,8 @@ The following are some guidelines to observe when creating issues or PRs:
 
 - Use reasonable titles; refrain from using overly long or capitalized titles as they are usually annoying and do little to encourage others to help :smile:
 
+<<<<<<< HEAD
 - Be detailed; refrain from mentioning code problems without sharing your source code and always give information regarding your board and version of the library.
+=======
+- Be detailed; refrain from mentioning code problems without sharing your source code and always give information regarding your board and version of the library
+>>>>>>> a6f956e06b58a37b58160fb9bb3c1ee06341f6a5
