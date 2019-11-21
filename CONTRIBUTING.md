@@ -1,6 +1,6 @@
-# Contribution Guidlines
+# Contribution Guidelines
 
-This library is the culmination of the expertise of many members of the open source community who have dedicated their time and hard work. The best way to ask for help or propose a new idea is to [create a new issue](https://github.com/arduino/EduIntro/issues/new) while creating a Pull Request with your code changes allows you to share your own innovations with the rest of the community.
+This library is the culmination of the expertise of many members of the open source community who have dedicated their time and hard work. The best way to ask for help or propose a new idea is to [create a new issue](https://github.com/arduino-libraries/LiquidCrystal/issues/new) while creating a Pull Request with your code changes allows you to share your own innovations with the rest of the community.
 
 The following are some guidelines to observe when creating issues or PRs:
 
@@ -10,4 +10,4 @@ The following are some guidelines to observe when creating issues or PRs:
 
 - Use reasonable titles; refrain from using overly long or capitalized titles as they are usually annoying and do little to encourage others to help :smile:
 
-- Be detailed; refrain from mentioning code problems without sharing your source code and always give information regarding your board and version of the library
+- Be detailed; refrain from mentioning code problems without sharing your source code and always give information regarding your board and version of the library.
