@@ -324,3 +324,10 @@ void LiquidCrystal::write8bits(uint8_t value) {
   
   pulseEnable();
 }
+
+void LiquidCrystal::digitalWrite(int pin, int value) {
+    ::digitalWrite(pin, value);
+}
+void LiquidCrystal::pinMode(int pin, int mode) {
+    ::pinMode(pin, mode);
+}
