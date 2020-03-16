@@ -28,6 +28,8 @@
  by Scott Fitzgerald
  modified 7 Nov 2016
  by Arturo Guadalupi
+ modified 17 Mar 2020
+ by Deepak Khatri
 
  Based on Adafruit's example at
  https://github.com/adafruit/SPI_VFD/blob/master/examples/createChar/createChar.pde
@@ -36,8 +38,7 @@
  http://www.arduino.cc/en/Tutorial/LiquidCrystalCustomCharacter
 
  Also useful:
- http://icontexto.com/charactercreator/
-
+ https://maxpromer.github.io/LCD-Character-Creator/
 */
 
 // include the library code:
