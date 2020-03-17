@@ -1,11 +1,74 @@
-= Liquid Crystal Library for Arduino =
+Liquid Crystal Library for Arduino
+----------------------------------
 
-This library allows an Arduino board to control LiquidCrystal displays (LCDs) based on the Hitachi HD44780 (or a compatible) chipset, which is found on most text-based LCDs.
+Description
+~~~~~~~~~~~
 
-For more information about this library please visit us at
-http://www.arduino.cc/en/Reference/LiquidCrystal
+This library allows an Arduino board to control LiquidCrystal displays (LCDs) based on the Hitachi HD44780 (or a compatible) chipset, which is found on most text-based LCDs. The library works within either 4- or 8-bit mode (i.e. using 4 or 8 data lines in addition to the rs, enable, and, optionally, the rw control lines).
 
-== License ==
+Installation
+~~~~~~~~~~~~
+image:https://user-images.githubusercontent.com/36513474/69337317-5fc13200-0c82-11ea-802d-d1bd9cc0a1b1.png[alt="Liquid Crystal Icon"]
+
+First Method
+^^^^^^^^^^^^
+
+1. In the Arduino IDE, navigate to Sketch > Include Library > Manage Libraries
+1. Then the Library Manager will open and you will find a list of libraries that are already installed or ready for installation.
+1. Then search for LiquidCrystal using the search bar.
+1. Click on the text area and then select the specific version and install it.
+
+Second Method
+^^^^^^^^^^^^^
+
+1. Navigate to the https://github.com/arduino-libraries/LiquidCrystal/releases[Releases page^].
+1. Download the latest release.
+1. Extract the zip file
+1. In the Arduino IDE, navigate to Sketch > Include Library > Add .ZIP Library
+
+Features
+~~~~~~~~
+
+* **Compatible chipset**
++
+image:https://user-images.githubusercontent.com/36513474/67893895-4e03d780-fb79-11e9-814b-d8fa03689344.png[alt="chipset"]
+
+    Using Liquid Crystal library, Arduino board can control liquid displays based on the Hitachi HD44780 chipset. These chipset LCDs are easily available, come in different shapes and sizes.
+
+* **No technical details required**
+
+    A key benefit of using this liquid crystal library is that there is no need to care that much about the technical details or timings when using the display. The library happily does all of this.
+
+* **Extendable**
+
+    The library is extendable, therefore it can grow to support new LCD control devices such as I2C, SPI, Serial, 1wire, RF, CAM, etc.
+
+* **Give back**
+
+    Liquid Crystal is free for everyone. The licensed library can be copied, redistributed and used in the projects, assignments or anywhere.
+
+Example
+~~~~~~~
+
+There are many examples implemented where this library is used. You can find examples https://github.com/arduino-libraries/LiquidCrystal/tree/master/examples[here^] and on https://www.arduino.cc/en/Reference/LiquidCrystal[Arduino-Reference^].
+
+You can find liquid crystal tutorials https://www.arduino.cc/en/Tutorial/HelloWorld?from=Tutorial.LiquidCrystal[here^].
+
+Contributing
+~~~~~~~~~~~~
+
+If you want to contribute to this project:
+
+- Report bugs and errors
+- Ask for enhancements
+- Create issues and pull requests
+- Tell others about this library
+- Contribute new protocols
+
+Please read https://github.com/arduino-libraries/LiquidCrystal/blob/master/CONTRIBUTING.md[CONTRIBUTING.md^] for details on our code of conduct, and the process for submitting pull requests to us.
+
+License
+~~~~~~~
 
 Copyright (C) 2006-2008 Hans-Christoph Steiner. All rights reserved.
 Copyright (c) 2010 Arduino LLC. All right reserved.
