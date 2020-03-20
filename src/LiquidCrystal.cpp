@@ -263,14 +263,24 @@ void LiquidCrystal::noAutoscroll(void) {
 // Allows us to fill the first 8 CGRAM locations
 // with custom characters
 void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
+  int ramAddr = read_BF_addr();
   location &= 0x7; // we only have 8 locations 0-7
   command(LCD_SETCGRAMADDR | (location << 3));
   for (int i=0; i<8; i++) {
     write(charmap[i]);
   }
+  if(ramAddr !=-1)
+    command(LCD_SETDDRAMADDR | ramAddr);
 }
 
 /*********** mid level commands, for sending data/cmds */
+
+inline uint8_t LiquidCrystal::read_BF_addr(void) {
+  return read(LOW);
+}
+inline uint8_t LiquidCrystal::read_RAM(void) {
+  return read(HIGH);
+}
 
 inline void LiquidCrystal::command(uint8_t value) {
   send(value, LOW);
@@ -300,6 +310,35 @@ void LiquidCrystal::send(uint8_t value, uint8_t mode) {
   }
 }
 
+int LiquidCrystal::read(bool mode) {
+  if (_rw_pin == 255) { // if there is a RW pin indicated, only then we can read
+    return -1;
+  }
+  else{
+    digitalWrite(_rw_pin, HIGH);//for read
+    digitalWrite(_rs_pin, mode);
+
+    for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
+    {
+      pinMode(_data_pins[i], INPUT);//library initializes data pins in output mode, so we need to change mode for reading
+    }
+
+    uint8_t address;
+    if (_displayfunction & LCD_8BITMODE) {
+      address = read8bits(); 
+    } else {
+      address = read4bits();
+    }
+
+     for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
+    {
+      pinMode(_data_pins[i], OUTPUT);
+    }
+
+    return int(address);
+  }
+}
+
 void LiquidCrystal::pulseEnable(void) {
   digitalWrite(_enable_pin, LOW);
   delayMicroseconds(1);    
@@ -323,4 +362,35 @@ void LiquidCrystal::write8bits(uint8_t value) {
   }
   
   pulseEnable();
+}
+
+
+uint8_t LiquidCrystal::read4bits() {
+  uint8_t address;
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(1);
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1);    // enable pulse must be >450ns
+  address = digitalRead(_data_pins[3])<<7|digitalRead(_data_pins[2])<<6|digitalRead(_data_pins[1])<<5|digitalRead(_data_pins[0])<<4;
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(100);   // commands need > 37us to settle
+
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1);    // enable pulse must be >450ns
+  address |= digitalRead(_data_pins[3])<<3|digitalRead(_data_pins[2])<<2|digitalRead(_data_pins[1])<<1|digitalRead(_data_pins[0]);
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(100);   // commands need > 37us to settle
+  return address;
+}
+
+uint8_t LiquidCrystal::read8bits() {
+  uint8_t address;
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(1);
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1);    // enable pulse must be >450ns
+  address = digitalRead(_data_pins[7])<<7|digitalRead(_data_pins[6])<<6|digitalRead(_data_pins[5])<<5|digitalRead(_data_pins[4])<<4|digitalRead(_data_pins[3])<<3|digitalRead(_data_pins[2])<<2|digitalRead(_data_pins[1])<<1|digitalRead(_data_pins[0]);
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(100);   // commands need > 37us to settle
+  return address;
 }
