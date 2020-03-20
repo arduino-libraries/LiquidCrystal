@@ -31,6 +31,8 @@ scrollDisplayLeft	KEYWORD2
 scrollDisplayRight	KEYWORD2
 createChar	KEYWORD2
 setRowOffsets	KEYWORD2
+readBFAddr  KEYWORD2
+readRAM KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
