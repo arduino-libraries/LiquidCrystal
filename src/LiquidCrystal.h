@@ -82,8 +82,8 @@ public:
   void setCursor(uint8_t, uint8_t); 
   virtual size_t write(uint8_t);
   void command(uint8_t);
-  uint8_t readBFAddr(void);
-  uint8_t readRAM(void);
+  int readBFAddr(void);
+  int readRAM(void);
   
   using Print::write;
 private:
