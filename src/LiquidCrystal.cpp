@@ -275,10 +275,10 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
 
 /*********** mid level commands, for sending data/cmds */
 
-inline uint8_t LiquidCrystal::readBFAddr(void) {
+inline int LiquidCrystal::readBFAddr(void) {
   return read(LOW);
 }
-inline uint8_t LiquidCrystal::readRAM(void) {
+int LiquidCrystal::readRAM(void) {
   return read(HIGH);
 }
 
