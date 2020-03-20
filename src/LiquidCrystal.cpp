@@ -263,7 +263,7 @@ void LiquidCrystal::noAutoscroll(void) {
 // Allows us to fill the first 8 CGRAM locations
 // with custom characters
 void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
-  int ramAddr = read_BF_addr();
+  int ramAddr = readBFAddr();
   location &= 0x7; // we only have 8 locations 0-7
   command(LCD_SETCGRAMADDR | (location << 3));
   for (int i=0; i<8; i++) {
@@ -275,10 +275,10 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
 
 /*********** mid level commands, for sending data/cmds */
 
-inline uint8_t LiquidCrystal::read_BF_addr(void) {
+inline uint8_t LiquidCrystal::readBFAddr(void) {
   return read(LOW);
 }
-inline uint8_t LiquidCrystal::read_RAM(void) {
+inline uint8_t LiquidCrystal::readRAM(void) {
   return read(HIGH);
 }
 
@@ -330,7 +330,7 @@ int LiquidCrystal::read(bool mode) {
       address = read4bits();
     }
 
-     for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
+    for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
     {
       pinMode(_data_pins[i], OUTPUT);
     }
