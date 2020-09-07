@@ -23,6 +23,8 @@
 // Note, however, that resetting the Arduino doesn't reset the LCD, so we
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
+//
+// See https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
 
 LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
@@ -75,6 +77,11 @@ void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t en
   begin(16, 1);  
 }
 
+// The LCD can be in one of three states (and we don't know which):
+// 1. 8-bit mode, waiting for 8-bits
+// 2. 4-bit mode, waiting for the first set of 4 bits
+// 3. 4-bit mode, waiting for the second set of 4 bits
+
 void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
   if (lines > 1) {
     _displayfunction |= LCD_2LINE;
@@ -88,73 +95,46 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
     _displayfunction |= LCD_5x10DOTS;
   }
 
+  // configure pins for output and set them to low voltage (0)
   pinMode(_rs_pin, OUTPUT);
+  digitalWrite(_rs_pin, LOW);
+
   // we can save 1 pin by not using RW. Indicate by passing 255 instead of pin#
   if (_rw_pin != 255) { 
     pinMode(_rw_pin, OUTPUT);
+    digitalWrite(_rw_pin, LOW);
   }
-  pinMode(_enable_pin, OUTPUT);
-  
-  // Do these once, instead of every time a character is drawn for speed reasons.
+
   for (int i=0; i<((_displayfunction & LCD_8BITMODE) ? 8 : 4); ++i)
   {
     pinMode(_data_pins[i], OUTPUT);
-   } 
+  } 
+
+  // the enable pin signals that a command or data is ready
+  // we let it get set low during LiquidCrystal::pulseEnable()
+  pinMode(_enable_pin, OUTPUT);
 
   // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
   // according to datasheet, we need at least 40ms after power rises above 2.7V
   // before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
   delayMicroseconds(50000); 
-  // Now we pull both RS and R/W low to begin commands
-  digitalWrite(_rs_pin, LOW);
-  digitalWrite(_enable_pin, LOW);
-  if (_rw_pin != 255) { 
-    digitalWrite(_rw_pin, LOW);
-  }
-  
-  //put the LCD into 4 bit or 8 bit mode
-  if (! (_displayfunction & LCD_8BITMODE)) {
-    // this is according to the hitachi HD44780 datasheet
-    // figure 24, pg 46
 
-    // we start in 8bit mode, try to set 4 bit mode
-    write4bits(0x03);
-    delayMicroseconds(4500); // wait min 4.1ms
+  // the following resets the LCD it to a known state (8-bit mode)
+  // depending on the (unknown) initial state, there might be some redundancy
+  write4bits(0x03);
+  delayMicroseconds(4500); // wait min 4.1ms
+  write4bits(0x03);
+  delayMicroseconds(150);  // wait min 100us
+  write4bits(0x03); 
 
-    // second try
-    write4bits(0x03);
-    delayMicroseconds(4500); // wait min 4.1ms
-    
-    // third go!
-    write4bits(0x03); 
-    delayMicroseconds(150);
-
-    // finally, set to 4-bit interface
-    write4bits(0x02); 
-  } else {
-    // this is according to the hitachi HD44780 datasheet
-    // page 45 figure 23
-
-    // Send function set command sequence
-    command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(4500);  // wait more than 4.1ms
-
-    // second try
-    command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(150);
-
-    // third go
-    command(LCD_FUNCTIONSET | _displayfunction);
-  }
-
-  // finally, set # lines, font size, etc.
+  // Now, set number of bits mode, # lines, font size
   command(LCD_FUNCTIONSET | _displayfunction);  
 
   // turn the display on with no cursor or blinking default
   _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;  
   display();
 
-  // clear it off
+  // clear display
   clear();
 
   // Initialize to default text direction (for romance languages)
@@ -241,7 +221,6 @@ void LiquidCrystal::leftToRight(void) {
   _displaymode |= LCD_ENTRYLEFT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
-
 // This is for text that flows Right to Left
 void LiquidCrystal::rightToLeft(void) {
   _displaymode &= ~LCD_ENTRYLEFT;
@@ -253,7 +232,6 @@ void LiquidCrystal::autoscroll(void) {
   _displaymode |= LCD_ENTRYSHIFTINCREMENT;
   command(LCD_ENTRYMODESET | _displaymode);
 }
-
 // This will 'left justify' text from the cursor
 void LiquidCrystal::noAutoscroll(void) {
   _displaymode &= ~LCD_ENTRYSHIFTINCREMENT;
