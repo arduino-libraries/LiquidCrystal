@@ -1,7 +1,15 @@
 #ifndef LiquidCrystal_h
 #define LiquidCrystal_h
 
+#include <Arduino.h>
+#ifdef MOCK_PINS_COUNT
+#define LiquidCrystal_CI LiquidCrystal
+#else
+#define LiquidCrystal_Base LiquidCrystal
+#endif
+
 #include <inttypes.h>
+#include <WString.h>
 #include "Print.h"
 
 // commands
@@ -42,17 +50,17 @@
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
 
-class LiquidCrystal : public Print {
+class LiquidCrystal_Base : public Print {
 public:
-  LiquidCrystal(uint8_t rs, uint8_t enable,
+  LiquidCrystal_Base(uint8_t rs, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 		uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-  LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+  LiquidCrystal_Base(uint8_t rs, uint8_t rw, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 		uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-  LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+  LiquidCrystal_Base(uint8_t rs, uint8_t rw, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
-  LiquidCrystal(uint8_t rs, uint8_t enable,
+  LiquidCrystal_Base(uint8_t rs, uint8_t enable,
 		uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
 
   void init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
@@ -82,6 +90,7 @@ public:
   void setCursor(uint8_t, uint8_t); 
   virtual size_t write(uint8_t);
   void command(uint8_t);
+  virtual String className() const { return "LiquidCrystal_Base"; }
   
   using Print::write;
 private:

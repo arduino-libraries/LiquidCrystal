@@ -1,9 +1,11 @@
+#ifdef LiquidCrystal_Test
+
 #include <bitset>
 #include <iostream>
 #include <Arduino.h>
 #include <ArduinoUnitTests.h>
 #include <ci/ObservableDataStream.h>
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_CI.h>
 
 const byte rs = 1;
 const byte rw = 2;
@@ -46,16 +48,21 @@ class BitCollector : public DataStreamObserver {
     virtual String observerName() const { return "BitCollector"; }
 };
 
+unittest(className) {
+  LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
+  std::cout << "TESTING: " << lcd.className() << std::endl;
+}
+
 unittest(constructors)
 {
-  LiquidCrystal lcd1(rs, enable, d4, d5, d6, d7);
-  LiquidCrystal lcd2(rs, rw, enable, d4, d5, d6, d7);
-  LiquidCrystal lcd3(rs, enable, d0, d1, d2, d3, d4, d5, d6, d7);
-  LiquidCrystal lcd4(rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
-  LiquidCrystal* lcd5 = new LiquidCrystal(rs, enable, d4, d5, d6, d7);
-  LiquidCrystal* lcd6 = new LiquidCrystal(rs, rw, enable, d4, d5, d6, d7);
-  LiquidCrystal* lcd7 = new LiquidCrystal(rs, enable, d0, d1, d2, d3, d4, d5, d6, d7);
-  LiquidCrystal* lcd8 = new LiquidCrystal(rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd1(rs, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd2(rs, rw, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd3(rs, enable, d0, d1, d2, d3, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd4(rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
+  LiquidCrystal_Test* lcd5 = new LiquidCrystal_Test(rs, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test* lcd6 = new LiquidCrystal_Test(rs, rw, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test* lcd7 = new LiquidCrystal_Test(rs, enable, d0, d1, d2, d3, d4, d5, d6, d7);
+  LiquidCrystal_Test* lcd8 = new LiquidCrystal_Test(rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
   assertNotNull(lcd5);
   assertNotNull(lcd6);
   assertNotNull(lcd7);
@@ -68,7 +75,7 @@ unittest(init)
   BitCollector enableBits;
   logIndex = 0;
   state->digitalPin[enable].addObserver("lcd", &enableBits);
-  LiquidCrystal lcd(rs, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
   state->digitalPin[enable].removeObserver("lcd");
   /*     rs rw  d7 to d0
      48 : 0  0  00110000      set to 8-bit mode (takes three tries)
@@ -96,7 +103,7 @@ unittest(begin_16_02)
   state->reset();
   BitCollector enableBits;
   logIndex = 0;
-  LiquidCrystal lcd(rs, enable, d4, d5, d6, d7);
+  LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
   state->digitalPin[enable].addObserver("lcd", &enableBits);
   lcd.begin(16, 2);
   state->digitalPin[enable].removeObserver("lcd");
@@ -121,4 +128,4 @@ unittest(begin_16_02)
   }
 }
 
-unittest_main()
+#endif
