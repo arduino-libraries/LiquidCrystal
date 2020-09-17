@@ -4,12 +4,12 @@
 #include <Arduino.h>
 #ifdef MOCK_PINS_COUNT
 #define LiquidCrystal_CI LiquidCrystal
+#include <WString.h>
 #else
 #define LiquidCrystal_Base LiquidCrystal
 #endif
 
 #include <inttypes.h>
-#include <WString.h>
 #include "Print.h"
 
 // commands
@@ -90,8 +90,10 @@ public:
   void setCursor(uint8_t, uint8_t); 
   virtual size_t write(uint8_t);
   void command(uint8_t);
+#ifdef MOCK_PINS_COUNT
   virtual String className() const { return "LiquidCrystal_Base"; }
-  
+#endif
+
   using Print::write;
 private:
   void send(uint8_t, uint8_t);

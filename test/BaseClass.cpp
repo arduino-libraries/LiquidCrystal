@@ -1,5 +1,5 @@
 
 #define LiquidCrystal_Test LiquidCrystal_Base
-#include "LiquidCrystalTest.cpp"
+#include "Common.cpp"
 
 unittest_main()

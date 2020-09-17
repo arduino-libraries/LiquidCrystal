@@ -1,6 +1,6 @@
 
 #define LiquidCrystal_Test LiquidCrystal
-#include "LiquidCrystalTest.cpp"
+#include "Common.cpp"
 
 unittest(getRows)
 {

@@ -1,5 +1,3 @@
-#ifdef LiquidCrystal_Test
-
 #include <bitset>
 #include <iostream>
 #include <Arduino.h>
@@ -127,5 +125,3 @@ unittest(begin_16_02)
     assertEqual(expected[i], pinLog[i]);
   }
 }
-
-#endif
