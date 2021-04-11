@@ -21,7 +21,7 @@
 //    S = 0; No shift 
 //
 // Note, however, that resetting the Arduino doesn't reset the LCD, so we
-// can't assume that its in that state when a sketch starts (and the
+// can't assume that it's in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
 LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
@@ -102,8 +102,8 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
    } 
 
   // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-  // according to datasheet, we need at least 40ms after power rises above 2.7V
-  // before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
+  // according to datasheet, we need at least 40 ms after power rises above 2.7 V
+  // before sending commands. Arduino can turn on way before 4.5 V so we'll wait 50
   delayMicroseconds(50000); 
   // Now we pull both RS and R/W low to begin commands
   digitalWrite(_rs_pin, LOW);
@@ -114,7 +114,7 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
   
   //put the LCD into 4 bit or 8 bit mode
   if (! (_displayfunction & LCD_8BITMODE)) {
-    // this is according to the hitachi HD44780 datasheet
+    // this is according to the Hitachi HD44780 datasheet
     // figure 24, pg 46
 
     // we start in 8bit mode, try to set 4 bit mode
@@ -132,12 +132,12 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
     // finally, set to 4-bit interface
     write4bits(0x02); 
   } else {
-    // this is according to the hitachi HD44780 datasheet
+    // this is according to the Hitachi HD44780 datasheet
     // page 45 figure 23
 
     // Send function set command sequence
     command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(4500);  // wait more than 4.1ms
+    delayMicroseconds(4500);  // wait more than 4.1 ms
 
     // second try
     command(LCD_FUNCTIONSET | _displayfunction);
@@ -189,10 +189,10 @@ void LiquidCrystal::setCursor(uint8_t col, uint8_t row)
 {
   const size_t max_lines = sizeof(_row_offsets) / sizeof(*_row_offsets);
   if ( row >= max_lines ) {
-    row = max_lines - 1;    // we count rows starting w/0
+    row = max_lines - 1;    // we count rows starting w/ 0
   }
   if ( row >= _numlines ) {
-    row = _numlines - 1;    // we count rows starting w/0
+    row = _numlines - 1;    // we count rows starting w/ 0
   }
   
   command(LCD_SETDDRAMADDR | (col + _row_offsets[row]));
@@ -278,7 +278,7 @@ inline void LiquidCrystal::command(uint8_t value) {
 
 inline size_t LiquidCrystal::write(uint8_t value) {
   send(value, HIGH);
-  return 1; // assume sucess
+  return 1; // assume success
 }
 
 /************ low level data pushing commands **********/
@@ -304,9 +304,9 @@ void LiquidCrystal::pulseEnable(void) {
   digitalWrite(_enable_pin, LOW);
   delayMicroseconds(1);    
   digitalWrite(_enable_pin, HIGH);
-  delayMicroseconds(1);    // enable pulse must be >450ns
+  delayMicroseconds(1);    // enable pulse must be >450 ns
   digitalWrite(_enable_pin, LOW);
-  delayMicroseconds(100);   // commands need > 37us to settle
+  delayMicroseconds(100);   // commands need >37 us to settle
 }
 
 void LiquidCrystal::write4bits(uint8_t value) {
