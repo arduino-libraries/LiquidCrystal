@@ -1,76 +1,89 @@
-/*
-  LiquidCrystal Library - setCursor
-
- Demonstrates the use of a 16x2 LCD display.  The LiquidCrystal
- library works with all LCD displays that are compatible with the
- Hitachi HD44780 driver. There are many of them out there, and you
- can usually tell them by the 16-pin interface.
-
- This sketch prints to all the positions of the LCD using the
- setCursor() method:
-
-  The circuit:
- * LCD RS pin to digital pin 12
- * LCD Enable pin to digital pin 11
- * LCD D4 pin to digital pin 5
- * LCD D5 pin to digital pin 4
- * LCD D6 pin to digital pin 3
- * LCD D7 pin to digital pin 2
- * LCD R/W pin to ground
- * 10K resistor:
- * ends to +5V and ground
- * wiper to LCD VO pin (pin 3)
-
- Library originally added 18 Apr 2008
- by David A. Mellis
- library modified 5 Jul 2009
- by Limor Fried (http://www.ladyada.net)
- example added 9 Jul 2009
- by Tom Igoe
- modified 22 Nov 2010
- by Tom Igoe
- modified 7 Nov 2016
- by Arturo Guadalupi
-
- This example code is in the public domain.
-
- https://www.arduino.cc/en/Tutorial/LibraryExamples/LiquidCrystalSetCursor
-
-*/
-
-// include the library code:
+//Display lcd
 #include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 7, 6, 5, 4);
 
-// initialize the library by associating any needed LCD interface pin
-// with the Arduino pin number it is connected to
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+//Fingerprint
+#include <Adafruit_Fingerprint.h>
+#include <SoftwareSerial.h>
+SoftwareSerial serial(2, 3);
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&serial);
 
-// these constants won't change.  But you can change the size of
-// your LCD using them:
-const int numRows = 2;
-const int numCols = 16;
+//Variabili
+int fingerId;
+String nameId = "";
+
+//Leds
+const int l_green = 10, l_red = 9;
 
 void setup() {
-  // set up the LCD's number of columns and rows:
-  lcd.begin(numCols, numRows);
+  //Debug
+  Serial.begin(9600);
+  
+  //Display
+  lcd.begin(16, 2);
+  lcd.print("Benvenuto");
+
+  //Fingerprint
+  finger.begin(57600);
+  if(finger.verifyPassword()) {
+    Serial.println("Found fingerprint sensor");
+  } else {
+    Serial.println("Fingerprint sensor not found :/");
+    lcd.clear();
+    lcd.print("Error");
+    while(1) { delay(1); }
+  }
+
+  //Leds
+  pinMode(l_green, OUTPUT);
+  pinMode(l_red, OUTPUT);
+}
+
+//Read fingerprint
+int ReadFinger() {
+  uint8_t p = finger.getImage();
+  if(p != FINGERPRINT_OK) { return -1; }
+  p = finger.image2Tz();
+  if(p != FINGERPRINT_OK) { return -1; }
+  p = finger.fingerFastSearch();
+  if(p != FINGERPRINT_OK) { return -2; }
+  return finger.fingerID;
+}
+
+void onSuccess() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Benvenuto");
+  lcd.setCursor(0, 1);
+  lcd.print(nameId);
+  if(nameId == "Sconosciuto") {
+    digitalWrite(l_red, HIGH);
+  } else {
+    digitalWrite(l_green, HIGH);
+  }
+  delay(1000);
+  digitalWrite(l_red, LOW);
+  digitalWrite(l_green, LOW);
 }
 
 void loop() {
-  // loop from ASCII 'a' to ASCII 'z':
-  for (int thisLetter = 'a'; thisLetter <= 'z'; thisLetter++) {
-    // loop over the columns:
-    for (int  thisRow = 0; thisRow < numRows; thisRow++) {
-      // loop over the rows:
-      for (int thisCol = 0; thisCol < numCols; thisCol++) {
-        // set the cursor position:
-        lcd.setCursor(thisCol, thisRow);
-        // print the letter:
-        lcd.write(thisLetter);
-        delay(200);
-      }
-    }
+  fingerId = ReadFinger();
+  switch(fingerId) {
+    case 1:
+      nameId = "Andrea Piergiovanni";
+      break;
+    case 2:
+      nameId = "Matteo Coccia";
+      break;
+    default:
+      nameId = "Sconosciuto";
+      break;
   }
+  if(fingerId != -1) {
+    onSuccess();
+  }
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Benvenuto");
+  delay(100);
 }
-
-
