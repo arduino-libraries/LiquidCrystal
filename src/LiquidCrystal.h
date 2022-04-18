@@ -90,8 +90,8 @@ private:
   void write8bits(uint8_t);
   void pulseEnable();
 
-  uint8_t _rs_pin; // LOW: command.  HIGH: character.
-  uint8_t _rw_pin; // LOW: write to LCD.  HIGH: read from LCD.
+  uint8_t _rs_pin; // LOW: command. HIGH: character.
+  uint8_t _rw_pin; // LOW: write to LCD. HIGH: read from LCD.
   uint8_t _enable_pin; // activated by a HIGH pulse.
   uint8_t _data_pins[8];
 
