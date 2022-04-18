@@ -18,8 +18,8 @@
  * LCD D7 pin to digital pin 2
  * LCD R/W pin to ground
  * 10K potentiometer:
- * ends to +5V and ground
- * wiper to LCD VO pin (pin 3)
+   * ends to +5V and ground
+   * wiper to LCD VO pin (pin 3)
  * 10K potentiometer on pin A0
 
  created 21 Mar 2011
