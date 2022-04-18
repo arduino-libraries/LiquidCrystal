@@ -1,13 +1,13 @@
 /*
   LiquidCrystal Library - Cursor
 
- Demonstrates the use of a 16x2 LCD display.  The LiquidCrystal
+ Demonstrates the use of a 16x2 LCD display. The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
  This sketch prints "hello, world!" to the LCD and
- uses the cursor()  and noCursor() methods to turn
+ uses the cursor() and noCursor() methods to turn
  on and off the cursor.
 
  The circuit:

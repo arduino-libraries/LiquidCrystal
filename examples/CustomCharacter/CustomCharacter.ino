@@ -1,7 +1,7 @@
 /*
   LiquidCrystal Library - Custom Characters
 
- Demonstrates how to add custom characters on an LCD  display.
+ Demonstrates how to add custom characters on an LCD display.
  The LiquidCrystal library works with all LCD displays that are
  compatible with the Hitachi HD44780 driver. There are many of
  them out there, and you can usually tell them by the 16-pin interface.
