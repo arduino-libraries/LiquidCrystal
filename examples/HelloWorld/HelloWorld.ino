@@ -36,8 +36,10 @@
 
  This example code is in the public domain.
 
- https://www.arduino.cc/en/Tutorial/LibraryExamples/HelloWorld
-
+ See https://docs.arduino.cc/learn/electronics/lcd-displays#hello-world-example
+ 
+ Code maintained at https://github.com/arduino-libraries/LiquidCrystal
+ 
 */
 
 // include the library code:
