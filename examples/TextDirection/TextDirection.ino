@@ -34,7 +34,8 @@
 
  This example code is in the public domain.
 
- http://www.arduino.cc/en/Tutorial/LiquidCrystalTextDirection
+ https://docs.arduino.cc/learn/electronics/lcd-displays#text-direction-example
+ https://github.com/arduino-libraries/LiquidCrystal
 
 */
 

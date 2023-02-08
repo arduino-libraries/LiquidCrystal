@@ -35,7 +35,8 @@
 
  This example code is in the public domain.
 
- https://www.arduino.cc/en/Tutorial/LibraryExamples/LiquidCrystalScroll
+ https://docs.arduino.cc/learn/electronics/lcd-displays#scroll-example
+ https://github.com/arduino-libraries/LiquidCrystal
 
 */
 

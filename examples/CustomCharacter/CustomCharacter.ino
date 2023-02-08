@@ -36,6 +36,10 @@
 
  This example code is in the public domain.
  
+  https://docs.arduino.cc/learn/electronics/lcd-displays#custom-character
+  https://github.com/arduino-libraries/LiquidCrystal
+
+ 
  Also useful:
  https://maxpromer.github.io/LCD-Character-Creator/
  

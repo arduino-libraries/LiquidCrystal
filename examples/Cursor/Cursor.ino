@@ -35,8 +35,8 @@
 
  This example code is in the public domain.
 
- https://www.arduino.cc/en/Tutorial/LibraryExamples/LiquidCrystalCursor
-
+ https://docs.arduino.cc/learn/electronics/lcd-displays#cursor
+ https://github.com/arduino-libraries/LiquidCrystal
 */
 
 // include the library code:
