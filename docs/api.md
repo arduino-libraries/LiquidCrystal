@@ -51,7 +51,7 @@ Initializes the interface to the LCD screen, and specifies the dimensions (width
 #### Syntax
 
 ```
-lcd.begin(cols, rows, [, charsize[=LCD_5x10DOTS]])
+lcd.begin(cols, rows [, charsize[=LCD_5x10DOTS]])
 ```
 
 #### Parameters
