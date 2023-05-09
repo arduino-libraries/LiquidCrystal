@@ -51,7 +51,7 @@ Initializes the interface to the LCD screen, and specifies the dimensions (width
 #### Syntax
 
 ```
-lcd.begin(cols, rows)
+lcd.begin(cols, rows, charsize)
 ```
 
 #### Parameters
@@ -60,6 +60,8 @@ lcd: a variable of type LiquidCrystal
 cols: the number of columns that the display has
 
 rows: the number of rows that the display has
+
+charsize: the number of dots that the display has, the usual LCD_5x8DOTS or LCD_5x10DOTS
 
 ### `clear()`
 
