@@ -51,7 +51,7 @@ Initializes the interface to the LCD screen, and specifies the dimensions (width
 #### Syntax
 
 ```
-lcd.begin(cols, rows [, charsize[=LCD_5x10DOTS]])
+lcd.begin(cols, rows, charsize)
 ```
 
 #### Parameters
@@ -61,7 +61,7 @@ cols: the number of columns that the display has
 
 rows: the number of rows that the display has
 
-charsize: the number of dots that the display has (default: LCD_5x8DOTS)
+charsize (optional): the number of dots the display has per character: LCD_5x8DOTS for 5x8, LCD_5x10DOTS for 5x10. (default: LCD_5x8DOTS)
 
 ### `clear()`
 
