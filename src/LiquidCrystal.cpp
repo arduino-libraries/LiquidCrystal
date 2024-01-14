@@ -1,6 +1,4 @@
 
-#if 0 
-
 #include "LiquidCrystal.h"
 
 #include <stdio.h>

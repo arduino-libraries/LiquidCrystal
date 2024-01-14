@@ -33,7 +33,6 @@ scrollDisplayRight	KEYWORD2
 createChar	KEYWORD2
 setRowOffsets	KEYWORD2
 
-
 init	KEYWORD2
 begin	KEYWORD2
 clear	KEYWORD2

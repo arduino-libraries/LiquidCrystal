@@ -1,13 +1,14 @@
 /*
-  LiquidCrystal Library - Hello World
+  LiquidCrystal Library - scrollDisplayLeft() and scrollDisplayRight()
 
  Demonstrates the use of a 16x2 LCD display. The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
- This sketch prints "hello, world!" to the LCD
- and shows the time.
+ This sketch prints "hello, world!" to the LCD and uses the
+ scrollDisplayLeft() and scrollDisplayRight() methods to scroll
+ the text.
 
   The circuit:
  * LCD RS pin to digital pin 12
@@ -17,8 +18,6 @@
  * LCD D6 pin to digital pin 3
  * LCD D7 pin to digital pin 2
  * LCD R/W pin to ground
- * LCD VSS pin to ground
- * LCD VCC pin to 5V
  * 10K or 100K potentiometer:
    * ends to +5V and ground
    * wiper to LCD VO pin (pin 3)
@@ -36,10 +35,9 @@
 
  This example code is in the public domain.
 
- See https://docs.arduino.cc/learn/electronics/lcd-displays#hello-world-example
- 
- Code maintained at https://github.com/arduino-libraries/LiquidCrystal
- 
+ https://docs.arduino.cc/learn/electronics/lcd-displays#scroll-example
+ https://github.com/arduino-libraries/LiquidCrystal
+
 */
 
 // include the library code:
@@ -55,12 +53,37 @@ void setup() {
   lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print("hello, world!");
+  delay(1000);
 }
 
 void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd.print(millis() / 1000);
+  // scroll 13 positions (string length) to the left
+  // to move it offscreen left:
+  for (int positionCounter = 0; positionCounter < 13; positionCounter++) {
+    // scroll one position left:
+    lcd.scrollDisplayLeft();
+    // wait a bit:
+    delay(150);
+  }
+
+  // scroll 29 positions (string length + display length) to the right
+  // to move it offscreen right:
+  for (int positionCounter = 0; positionCounter < 29; positionCounter++) {
+    // scroll one position right:
+    lcd.scrollDisplayRight();
+    // wait a bit:
+    delay(150);
+  }
+
+  // scroll 16 positions (display length + string length) to the left
+  // to move it back to center:
+  for (int positionCounter = 0; positionCounter < 16; positionCounter++) {
+    // scroll one position left:
+    lcd.scrollDisplayLeft();
+    // wait a bit:
+    delay(150);
+  }
+
+  // delay at the end of the full loop:
+  delay(1000);
 }

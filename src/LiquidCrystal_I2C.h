@@ -21,15 +21,15 @@ public:
 	void printLeft();
 	void printRight();
 	void setCursor(uint8_t col, uint8_t row);
-	void shiftIncrement();
+	
+	void shiftIncrement(); //todo
 	void shiftDecrement();
+	
 	void noBacklight();
 	void backlight();
 	bool getBacklight();
 
-	
-
-	inline void blink_on() { blink(); }
+	inline void blink_on() { blink(); } // todo? transfer in base classe
 	inline void blink_off() { noBlink(); }
 	inline void cursor_on() { cursor(); }
 	inline void cursor_off() { noCursor(); }

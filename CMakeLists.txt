@@ -1,5 +1,5 @@
 # Make Menu Navigation System Library
-# https://github.com/VladVanyuk/VirtLiquidCrystal
+# https://github.com/VladVanyuk/BaseLiquidCrystal
 # MIT License
 
 cmake_minimum_required(VERSION 3.5)
@@ -8,4 +8,4 @@ idf_component_register(SRCS "LiquidCrystal_Base.cpp" "LiquidCrystal.cpp" "Liquid
                        INCLUDE_DIRS "."
                        REQUIRES arduino)
 
-project(LiquidCrystal_Base)
+project(BaseLiquidCrystal)
