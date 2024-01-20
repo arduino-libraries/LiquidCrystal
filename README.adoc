@@ -9,6 +9,22 @@ image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/
 
 This library allows an Arduino board to control liquid crystal displays (LCDs) based on the Hitachi HD44780 (or a compatible) chipset, which is found on most text-based LCDs.
 
+For using with VFD Futaba M242SD was added command for setting brightness:
+
+Usage:
+
+lcd.bright(LCD_BRIGHT100);   // set brightness to 100%
+
+lcd.bright(LCD_BRIGHT75);    // set brightness to 75%
+
+lcd.bright(LCD_BRIGHT50);    // set brightness to 50%
+
+lcd.bright(LCD_BRIGHT25);    // set brightness to 25%
+
+Datasheet: https://www.mouser.com/datasheet/2/921/Futaba-06-11-2019-Futaba_VFD_Modules-1602274.pdf
+
+
+
 For more information about this library please visit us at
 
 https://www.arduino.cc/en/Reference/{repository-name}
