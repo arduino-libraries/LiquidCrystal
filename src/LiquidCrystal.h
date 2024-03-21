@@ -82,12 +82,17 @@ public:
   void setCursor(uint8_t, uint8_t); 
   virtual size_t write(uint8_t);
   void command(uint8_t);
+  int readBFAddr(void);
+  int readRAM(void);
   
   using Print::write;
 private:
   void send(uint8_t, uint8_t);
   void write4bits(uint8_t);
   void write8bits(uint8_t);
+  int read(bool);
+  uint8_t read4bits();
+  uint8_t read8bits();
   void pulseEnable();
 
   uint8_t _rs_pin; // LOW: command. HIGH: character.
