@@ -119,15 +119,15 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 
     // we start in 8bit mode, try to set 4 bit mode
     write4bits(0x03);
-    delayMicroseconds(4500); // wait min 4.1ms
+    delayMicroseconds(4400); // wait min 4.1ms
 
     // second try
     write4bits(0x03);
-    delayMicroseconds(4500); // wait min 4.1ms
+    delayMicroseconds(4400); // wait min 4.1ms
     
     // third go!
     write4bits(0x03); 
-    delayMicroseconds(150);
+    delayMicroseconds(150); // wait min 100μs
 
     // finally, set to 4-bit interface
     write4bits(0x02); 
@@ -137,11 +137,11 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 
     // Send function set command sequence
     command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(4500);  // wait more than 4.1 ms
+    delayMicroseconds(4400);  // wait min 4.1ms
 
     // second try
     command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(150);
+    delayMicroseconds(150);  // wait min 100μs
 
     // third go
     command(LCD_FUNCTIONSET | _displayfunction);
@@ -176,13 +176,13 @@ void LiquidCrystal::setRowOffsets(int row0, int row1, int row2, int row3)
 void LiquidCrystal::clear()
 {
   command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-  delayMicroseconds(2000);  // this command takes a long time!
+  delayMicroseconds(1800);  // wait min 1.52ms
 }
 
 void LiquidCrystal::home()
 {
   command(LCD_RETURNHOME);  // set cursor position to zero
-  delayMicroseconds(2000);  // this command takes a long time!
+  delayMicroseconds(1800);  // wait min 1.52ms
 }
 
 void LiquidCrystal::setCursor(uint8_t col, uint8_t row)
