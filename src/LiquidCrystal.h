@@ -84,6 +84,9 @@ public:
   void command(uint8_t);
   
   using Print::write;
+protected:
+  virtual void digitalWrite(int pin, int value);
+  virtual void pinMode(int pin, int mode);
 private:
   void send(uint8_t, uint8_t);
   void write4bits(uint8_t);
