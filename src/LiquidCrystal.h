@@ -42,6 +42,10 @@
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
 
+#ifdef ARDUINO_ARCH_MEGAAVR
+using namespace arduino; //!< MEGA AVR architecture uses the arduino namespace
+#endif                   //!< but AVR arch does not
+
 class LiquidCrystal : public Print {
 public:
   LiquidCrystal(uint8_t rs, uint8_t enable,
