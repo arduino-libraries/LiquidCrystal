@@ -270,6 +270,126 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
   }
 }
 
+// Get the current cursor position and put the information in the passed values
+void LiquidCrystal::getCursorPos(int &col, int &row) {
+    uint8_t value = readBusyFlagAndAddress();
+    value &= 0x7f; //get rid of the busy flag if it is set
+
+    row=0;
+    if(_numlines > 1)
+    {
+        //if there are 2 rows
+        if(value >= 64 )//it means it is on line 2
+        {
+            value-=64;
+            row=1;
+        }
+    }
+    col = value;
+}
+
+// Retrieves a number of characters starting from the specified position
+// and puts them into the buffer, the buffer is NOT null terminated.
+// Returns 0 if it could not read or returns the length if it was successful.
+// Much faster with more characters than calling getCharAt for each character.
+uint8_t LiquidCrystal::getChars(uint8_t col, uint8_t row, char* buffer, uint8_t length)
+{
+
+    if (_rw_pin == 255)
+    {//if there is no rw pin just return 0
+      return 0;
+    }
+
+    //save the last position to return to it when the function is finished
+    int prev_col, prev_row;
+    getCursorPos(prev_col, prev_row);
+
+    setCursor(col, row);
+
+     for(int i=0; i<length; i++) // no need to increment position...
+        {
+            buffer[i]= receive(HIGH);
+        }
+
+    //return to the initial position of the cursor
+    setCursor(prev_col, prev_row);
+
+    return length;
+}
+
+// Retrieves a character from the specified position
+char LiquidCrystal::getCharAt(uint8_t col, uint8_t row)
+{
+    return getCharAt(col, row, 0); //calls the getCharAt without
+//it to return to the current position, so it saves a little bit of time
+}
+
+// Retrieves a character from the specified position with the possibility of returning to the original position
+char LiquidCrystal::getCharAt(uint8_t col, uint8_t row, uint8_t ret)
+{
+    if (_rw_pin == 255)
+    {//if there is no rw pin just return 0
+        return (char) 0;
+    }
+
+    int x,y;
+    if(ret)  //if it needs to return, save the current position
+    {
+        getCursorPos(x,y);
+    }
+
+    setCursor(col, row); //set the position to the one from which to read
+
+    char value = 0 ;
+    value = receive(HIGH);
+
+    if(ret) //return to the old position
+    {
+        setCursor(x,y);
+    }
+    return value;
+}
+
+// Deletes the character from the specified position
+void LiquidCrystal::deleteAt(uint8_t col, uint8_t row)
+{
+    //get to the specified pos, write whitespace and move the cursor back
+    setCursor(col, row);
+    print(' ');
+    if(_displaymode & LCD_ENTRYLEFT) // which direction is it writing?
+    {
+//decrement
+        command(LCD_CURSORSHIFT | LCD_MOVELEFT);
+    }
+    else
+    {
+//increment
+        command(LCD_CURSORSHIFT | LCD_MOVERIGHT);
+    }
+}
+
+// Deletes the character from the current position -1
+void LiquidCrystal::deleteLast()
+{
+// which direction is it writing?
+    uint8_t cmd = 0;
+    if(_displaymode & LCD_ENTRYLEFT)
+    {
+//decrement
+        cmd=LCD_CURSORSHIFT | LCD_MOVELEFT;
+    }
+    else
+    {
+//increment
+        cmd=LCD_CURSORSHIFT | LCD_MOVERIGHT;
+    }
+
+// move the cursor, write whitespace and move the cursor back...
+    command(cmd);
+    print(' ');
+    command(cmd);
+}
+
 /*********** mid level commands, for sending data/cmds */
 
 inline void LiquidCrystal::command(uint8_t value) {
@@ -323,4 +443,48 @@ void LiquidCrystal::write8bits(uint8_t value) {
   }
   
   pulseEnable();
+}
+
+// Reads data from the LCD in 4Bit Mode
+uint8_t LiquidCrystal::read4bits()
+{
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1); // tDDR time
+
+  uint8_t value =0;
+  for(int i=3; i>=0; i--)
+  {
+    value= value<< 1;
+
+    pinMode(_data_pins[i], INPUT);
+    if(digitalRead(_data_pins[i]) == HIGH)
+    {
+      value+=1;
+    }
+  }
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(1); //tDHR time
+
+  return value;
+}
+
+// Reads data from the LCD in 8Bit Mode
+uint8_t LiquidCrystal::read8bits()
+{
+  digitalWrite(_enable_pin, HIGH);
+  delayMicroseconds(1); // tDDR time
+  uint8_t value =0;
+  for(int i=7; i>=0; i--)
+  {
+    value= value<< 1;
+
+    pinMode(_data_pins[i], INPUT);
+    if(digitalRead(_data_pins[i]) == HIGH)
+    {
+	  value+=1;
+    }
+  }
+  digitalWrite(_enable_pin, LOW);
+  delayMicroseconds(1); //tDHR time
+  return value;
 }
