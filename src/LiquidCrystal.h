@@ -13,6 +13,10 @@
 #define LCD_FUNCTIONSET 0x20
 #define LCD_SETCGRAMADDR 0x40
 #define LCD_SETDDRAMADDR 0x80
+#define LCD_BRIGHT100 0x00
+#define LCD_BRIGHT75 0x01
+#define LCD_BRIGHT50 0x02
+#define LCD_BRIGHT25 0x03
 
 // flags for display entry mode
 #define LCD_ENTRYRIGHT 0x00
@@ -60,6 +64,8 @@ public:
 	    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
     
   void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+
+  void bright (uint8_t brg) { command (LCD_FUNCTIONSET | _displayfunction | brg); }
 
   void clear();
   void home();
