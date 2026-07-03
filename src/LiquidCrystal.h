@@ -41,6 +41,8 @@
 #define LCD_1LINE 0x00
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
+#define LCD_CPAGE0 0x00
+#define LCD_CPAGE1 0x02
 
 class LiquidCrystal : public Print {
 public:
@@ -80,6 +82,7 @@ public:
   void setRowOffsets(int row1, int row2, int row3, int row4);
   void createChar(uint8_t, uint8_t[]);
   void setCursor(uint8_t, uint8_t); 
+  void setCodePage(uint8_t);
   virtual size_t write(uint8_t);
   void command(uint8_t);
   
@@ -98,6 +101,7 @@ private:
   uint8_t _displayfunction;
   uint8_t _displaycontrol;
   uint8_t _displaymode;
+  uint8_t _cpage;
 
   uint8_t _initialized;
 

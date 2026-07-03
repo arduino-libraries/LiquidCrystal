@@ -31,6 +31,7 @@ scrollDisplayLeft	KEYWORD2
 scrollDisplayRight	KEYWORD2
 createChar	KEYWORD2
 setRowOffsets	KEYWORD2
+setCodePage	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
