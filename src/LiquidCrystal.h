@@ -1,6 +1,8 @@
 #ifndef LiquidCrystal_h
 #define LiquidCrystal_h
 
+#include <Arduino.h>
+
 #include <inttypes.h>
 #include "Print.h"
 
